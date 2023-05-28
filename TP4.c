@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tp4.h"
-
-
+#include<stdbool.h>
+#include<ctype.h>
 
 T_Position* ajouterPosition(T_Position* listeP, int ligne, int ordre, int phrase)
 {
@@ -95,39 +95,95 @@ T_Position* ajouterPosition(T_Position* listeP, int ligne, int ordre, int phrase
 
 }
 
-/*
+
 int ajouterOccurence(T_Index* index, char* mot, int ligne, int ordre, int phrase) {
 
+	tolower(mot);
 	T_Noeud * nouveau_mot = NULL; 
 	nouveau_mot = malloc(sizeof(T_Noeud));
 
 	T_Position* listeP = NULL; 
 	listeP = malloc(sizeof(T_Position));
-	nouveau_mot->listePositions = ajouterPostition(listeP, ligne, ordre, phrase);
+	nouveau_mot->listePositions = ajouterPosition(listeP, ligne, ordre, phrase);
 	nouveau_mot->filsDroit = NULL; 
 	nouveau_mot->filsGauche = NULL;
 	nouveau_mot->mot = mot;  // ON pourra avoir une erreur
-	index->nbMotsDistincts = 0;
-	index->nbMotsTotal = 0; 
-
+	
+	T_Noeud* racine = index->racine; 
 	if (index == NULL) {
 
 		index->racine = nouveau_mot; 
-		index->nbMotsDistincts++; 
-		index->nbMotsTotal++; 
-		return index; 
+		index->nbMotsDistincts = 1;
+		index->nbMotsTotal = 1;
+
+		return 1; 
+
 	} 
+	else {
+		T_Noeud* noeud_courant = racine; 
+		T_Noeud* noeud_pere = NULL; 
+		bool mot_exist = false; 
+		bool plus_grand_que_noeud_pere; 
+		while (noeud_courant != NULL) {
+
+			noeud_pere = noeud_courant; 
+			if (strcmp((noeud_courant->mot), mot) < 0) {
+				plus_grand_que_noeud_pere = false;
+				noeud_courant = noeud_courant->filsGauche; 
+
+			}
+			if (strcmp((noeud_courant->mot), mot) > 0) {
+				plus_grand_que_noeud_pere = true; 
+				noeud_courant = noeud_courant->filsDroit; 
+
+			}
+			if (strcmp((noeud_courant->mot), mot) == 0) {
+				mot_exist = true; 
+				break; 
+			}
+
+		}
+		if (mot_exist == true) {
+
+			ajouterPosition(noeud_courant->listePositions, ligne, ordre, phrase); 
+			index->nbMotsTotal++;
+
+		}
+		else {
+			if (plus_grand_que_noeud_pere == true) {
+
+				noeud_pere->filsDroit = nouveau_mot;  
+				index->nbMotsDistincts++; 
+				index->nbMotsTotal++; 
+				return 1; 
+			}
+			else {
+				noeud_pere->filsGauche = nouveau_mot;
+				index->nbMotsDistincts++;
+				index->nbMotsTotal++;
+				return 1; 
+
+			}
+			
+		}
+
+	}	
+	return 0; 
+
+}		
 
 
-	
-
-}	
-*/
-
-
-
+//3 
 //strcmp
 
+int indexerFichier(T_Index* index, char* filename) {
+
+
+
+
+
+
+}
 
 
 
