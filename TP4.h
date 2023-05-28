@@ -39,7 +39,7 @@ typedef struct Index T_Index;
 
 T_Position* ajouterPosition(T_Position* listeP, int ligne, int ordre, int phrase);
 
-
+int ajouterOccurence(T_Index* index, char* mot, int ligne, int ordre, int phrase) ; 
 
 #endif
 
